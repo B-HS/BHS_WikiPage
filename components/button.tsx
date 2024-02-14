@@ -13,8 +13,8 @@ export const BTN_VARIABLES = {
     success: 'bg-green-500 hover:bg-green-700 text-white rounded',
     danger: 'bg-red-500 hover:bg-red-700 text-white rounded',
     warning: 'bg-yellow-500 hover:bg-yellow-700 text-white rounded',
-    outline: 'bg-background hover:bg-foreground hover:text-background font-semibold border rounded',
-    outlineInverted: 'bg-foreground hover:bg-background hover:text-foreground font-semibold border rounded text-white dark:text-black',
+    outline: 'bg-background hover:bg-foreground hover:text-background font-semibold border rounded hover:border-foreground',
+    outlineInverted: 'bg-foreground hover:bg-background hover:text-foreground font-semibold border rounded text-white dark:text-black border-foreground hover:border-background',
     ghost: 'bg-background hover:bg-foreground hover:text-background font-semibold rounded',
 }
 export const BTN_SIZE = {
