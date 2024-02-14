@@ -1,4 +1,4 @@
-import Button from '@/components/button'
+import Button from '../button'
 
 const Navigation = () => {
     return (
