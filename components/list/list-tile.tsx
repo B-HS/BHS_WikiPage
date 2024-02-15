@@ -1,15 +1,16 @@
 'use client'
 import { DocProps } from '@/app/doc/[docid]/page'
-import { ChevronRight, Paperclip, ScrollTextIcon } from 'lucide-react'
+import { PageContext } from '@/context/page-context'
+import { ChevronRight, ScrollTextIcon } from 'lucide-react'
 import Link from 'next/link'
-import { useSearchParams } from 'next/navigation'
+import { useContext } from 'react'
 
 const ListTile = ({ info }: { info?: DocProps }) => {
+    const { page } = useContext(PageContext)
     const { docid, title } = info || {}
-    const searchParams = useSearchParams()
     return (
         info && (
-            <Link href={`/doc/${docid}?page=${searchParams.get('page') || '1'}`}>
+            <Link href={`/doc/${docid}?page=${page || '1'}`}>
                 <section className='group p-2.5 flex-1 border flex justify-start gap-3 hover:bg-secondary transition-all cursor-pointer relative rounded hover:shadow-md'>
                     <span className='w-1/12 flex justify-center'>
                         <ScrollTextIcon className='p-0.5' />
