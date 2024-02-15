@@ -42,7 +42,7 @@ const Home = () => {
     return (
         <section className='flex flex-col flex-1'>
             <List docs={docs} />
-            {totalPages > 1 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
+            {totalPages > 1 && docs.length > 0 && <Pagination currentPage={currentPage} totalPages={totalPages} onPageChange={handlePageChange} />}
         </section>
     )
 }
