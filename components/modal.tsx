@@ -2,7 +2,14 @@
 import { XIcon } from 'lucide-react'
 import { ReactNode, forwardRef, useImperativeHandle, useState } from 'react'
 
-const Modal = forwardRef(({ title, children, btns, trigger }: { title: string; children: ReactNode; btns: ReactNode; trigger: ReactNode }, eModal) => {
+interface ModalProps {
+    title: string
+    children: ReactNode
+    btns: ReactNode
+    trigger: ReactNode
+}
+
+const Modal = forwardRef(({ title, children, btns, trigger }: ModalProps, eModal) => {
     const [isModal, setIsModal] = useState(false)
     const open = () => setIsModal(true)
     const close = () => setIsModal(false)
@@ -13,7 +20,7 @@ const Modal = forwardRef(({ title, children, btns, trigger }: { title: string; c
     }))
 
     return (
-        <section>
+        <section onKeyDown={(e) => e.key === 'Escape' && close()}>
             <section className='w-full h-full' onClick={open}>
                 {trigger}
             </section>
