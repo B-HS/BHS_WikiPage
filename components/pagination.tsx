@@ -18,7 +18,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: nu
     }
 
     return (
-        <section className='mx-auto p-3'>
+        <section>
             <section className='flex-1 flex justify-center'>
                 {currentPage !== 1 && (
                     <>
