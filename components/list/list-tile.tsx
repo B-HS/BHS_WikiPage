@@ -1,6 +1,6 @@
 'use client'
 import { DocProps } from '@/app/doc/[docid]/page'
-import { PageContext } from '@/context/page-context'
+import { PageContext } from '@/context/contexts/page-context'
 import { ChevronRight, ScrollTextIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useContext } from 'react'
