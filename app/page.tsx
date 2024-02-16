@@ -1,7 +1,8 @@
 'use client'
 
+import AddDoc from '@/components/list/add-doc'
 import List from '@/components/list/list'
-import { PageContext } from '@/context/page-context'
+import { PageContext } from '@/context/contexts/page-context'
 import { Suspense, useContext, useEffect, useState } from 'react'
 import Pagination from '../components/pagination'
 import { DocProps } from './doc/[docid]/page'
@@ -17,17 +18,23 @@ const Home = () => {
             .then((dataObj) => {
                 const { total, data } = dataObj
                 setDocs(data)
-                setTotalPages(total / 5)
+                setTotalPages(Math.ceil(total / 5))
+                if (data.length === 0 && page > 1) {
+                    setPage(page - 1)
+                }
             })
             .catch((error) => {
                 console.error('Error fetching data: ', error)
             })
-    }, [page])
+    }, [page, setPage])
 
     return (
         <section className='flex flex-col flex-1'>
             <List docs={docs} />
-            <Suspense>{totalPages > 1 && <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />}</Suspense>
+            <section className='flex justify-between items-baseline relative flex-wrap py-3'>
+                <AddDoc />
+                <Suspense>{totalPages > 1 && <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />}</Suspense>
+            </section>
         </section>
     )
 }
