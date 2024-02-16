@@ -29,9 +29,7 @@ export const findDocsWithPageable = async (page: number, cnt: number) => {
 }
 
 // 더미 doc docid기준으로 READ, 자동 링크처리를 위해 doc전체목록 + replace로 해당 타이틀을 anchor로 replacing
-// 테스트 기준 20만자
-// ㄴ api 처리 400ms +-10,
-// ㄴ 렌더링까지 1~2.5초
+// 테스트 기준 5만자 기준 1초 이하
 export const findDocByDocid = async (docid: string, page: number | string) => {
     try {
         const docs = await getFullFiles()
@@ -43,22 +41,27 @@ export const findDocByDocid = async (docid: string, page: number | string) => {
                     targetDoc.description = targetDoc.description.replace(regex, `<a class='border-b' href="/doc/${ele.docid}?page=${page}">${ele.title} 🔗</a>`)
                 }
             })
+            return targetDoc
         }
-        return targetDoc
+        return {}
     } catch (error) {
         console.error('Error fetching documents:', error)
-        return null
+        return {}
     }
 }
 
 // 더미 doc 추가
-export const insertDoc = async (doc: DocProps): Promise<void> => {
+export const insertDoc = async (doc: DocProps): Promise<{ total: number; docid: string }> => {
     try {
         const docs = await getFullFiles()
+        const docid = crypto.randomUUID()
+        doc.docid = docid
         docs.push(doc)
         await writeDoc(docs)
+        return { total: docs.length + 1, docid }
     } catch (error) {
         console.error('Error inserting document:', error)
+        return { total: -1, docid: '' }
     }
 }
 
