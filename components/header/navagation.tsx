@@ -10,9 +10,6 @@ const Navigation = () => {
                     목록
                 </Button>
             </Link>
-            <Button size='md' variant='ghost'>
-                추가
-            </Button>
         </section>
     )
 }
