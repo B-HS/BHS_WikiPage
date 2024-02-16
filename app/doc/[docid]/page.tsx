@@ -1,4 +1,4 @@
-import { PageSetter } from '@/context/page-context'
+import { PageSetter } from '@/context/contexts/page-context'
 import { headers } from 'next/headers'
 import Doc from '../../../components/docs/doc'
 
