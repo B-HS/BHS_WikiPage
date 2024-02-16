@@ -1,6 +1,6 @@
 import Header from '@/components/header/header'
+import ContextProvider from '@/context/context-provider'
 import type { Metadata } from 'next'
-import PageContextProvider from '../context/page-context'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -12,10 +12,10 @@ const RootLayout = ({ children }: Readonly<{ children: React.ReactNode }>) => {
     return (
         <html lang='ko'>
             <body className='container max-w-screen-md mx-auto'>
-                <PageContextProvider>
+                <ContextProvider>
                     <Header />
                     <section className='p-2 flex flex-col w-full flex-1'>{children}</section>
-                </PageContextProvider>
+                </ContextProvider>
             </body>
         </html>
     )
