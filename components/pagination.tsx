@@ -3,7 +3,6 @@ import Button from './button'
 
 const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: number; totalPages: number; onPageChange: (pageNumber: number) => void }) => {
     const maxPagesToShow = 5
-    const pageNumbers = []
 
     let startPage = Math.max(1, currentPage - Math.floor(maxPagesToShow / 2))
     let endPage = Math.min(totalPages, startPage + maxPagesToShow - 1)
@@ -13,9 +12,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: { currentPage: nu
     } else if (totalPages > maxPagesToShow && currentPage >= totalPages - Math.floor(maxPagesToShow / 2)) {
         startPage = totalPages - maxPagesToShow + 1
     }
-    for (let i = startPage; i <= endPage; i++) {
-        pageNumbers.push(i)
-    }
+
+    const pageNumbers = Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i)
 
     return (
         <section>
