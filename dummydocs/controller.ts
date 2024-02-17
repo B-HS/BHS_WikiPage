@@ -1,12 +1,18 @@
 import { DocProps } from '@/app/doc/[docid]/page'
 import { deleteDoc, findDocByDocid, findDocsWithPageable, insertDoc, updateDoc } from './service'
 
-export const findDocs = (page: number, cnt: number) => {
-    return findDocsWithPageable(page, cnt)
+export interface RequestParam {
+    page: number
+    keyword?: string
 }
 
-export const findDocById = (docid: string, page: number | string) => {
-    return findDocByDocid(docid, page)
+export const findDocs = (info: RequestParam, cnt: number) => {
+    return findDocsWithPageable(info, cnt)
+}
+
+export const findDocById = (docid: string, info: RequestParam) => {
+    !info.keyword && delete info.keyword
+    return findDocByDocid(docid, info)
 }
 
 export const writeDoc = (doc: DocProps) => {
