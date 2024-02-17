@@ -1,42 +1,37 @@
-'use client'
+import Button from '@/components/button'
+import { clearAllWikiList, setDummyJson } from '@/util/page-util'
+import Link from 'next/link'
 
-import AddDoc from '@/components/list/add-doc'
-import List from '@/components/list/list'
-import { PageContext } from '@/context/contexts/page-context'
-import { Suspense, useContext, useEffect, useState } from 'react'
-import Pagination from '../components/pagination'
-import { DocProps } from './doc/[docid]/page'
+const Home = async () => {
+    const removeWikiList = async () => {
+        'use server'
+        await clearAllWikiList()
+    }
 
-const Home = () => {
-    const [docs, setDocs] = useState<DocProps[]>([])
-    const [totalPages, setTotalPages] = useState(0)
-    const { page, setPage } = useContext(PageContext)
-
-    useEffect(() => {
-        fetch(`/api/list?page=${page}`)
-            .then((response) => response.json())
-            .then((dataObj) => {
-                const { total, data } = dataObj
-                setDocs(data)
-                setTotalPages(Math.ceil(total / 5))
-                if (data.length === 0 && page > 1) {
-                    setPage(page - 1)
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching data: ', error)
-            })
-    }, [page, setPage])
-
+    const setDummyData = async () => {
+        'use server'
+        await setDummyJson()
+    }
     return (
-        <section className='flex flex-col flex-1'>
-            <List docs={docs} />
-            <section className='flex justify-between items-baseline relative flex-wrap py-3'>
-                <AddDoc />
-                <Suspense>{totalPages > 1 && <Pagination currentPage={page} totalPages={totalPages} onPageChange={setPage} />}</Suspense>
+        <div>
+            <p className='text-3xl font-bold'>코딩허브 프론트엔드 과제 - 위키페이지</p>
+            <p>2023. 02. 18 - 변현석</p>
+            <section className='flex gap-2 py-3'>
+                <Link href='/doc'>
+                    <Button variant='outline'>위키페이지로 이동하기</Button>
+                </Link>
+                <form action={removeWikiList}>
+                    <Button type='submit' variant='danger'>
+                        위키 목록 지우기
+                    </Button>
+                </form>
+                <form action={setDummyData}>
+                    <Button type='submit' variant='warning'>
+                        위키 더미데이터로 교체하기
+                    </Button>
+                </form>
             </section>
-        </section>
+        </div>
     )
 }
-
 export default Home
