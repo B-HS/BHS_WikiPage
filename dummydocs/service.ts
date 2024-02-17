@@ -52,6 +52,7 @@ export const findDocByDocid = async (docid: string, page: number | string) => {
                     ele.isReplaced = true
                 }
             })
+
             // $[숫자]$용 regex
             const regexPlaceholder = /\$\[(\d+)\]\$/g
 
@@ -60,7 +61,7 @@ export const findDocByDocid = async (docid: string, page: number | string) => {
                 index = parseInt(index)
                 if (index >= 0 && index < replacelist.length) {
                     const ele = replacelist[index]
-                    // 목표title이 replacing할 description의 title과 같은 경우
+                    // 목표title이 replacing할 description의 title과 같은 경우 링크 없이 원본 title로 복구
                     if (ele.title === targetDoc.title) {
                         return ele.title
                     }
