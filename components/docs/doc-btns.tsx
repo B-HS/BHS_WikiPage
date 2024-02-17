@@ -41,7 +41,7 @@ const DocumentButtons = ({ info }: { info: DocProps }) => {
     const deleteDoc = () => {
         fetch('/api/delete', { method: 'POST', body: JSON.stringify(docInfos) }).then((response) => {
             response.status === 200 && modifyModal.current?.close()
-            router.replace('/')
+            router.replace('/doc')
         })
     }
 

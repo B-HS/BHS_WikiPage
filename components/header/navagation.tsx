@@ -5,9 +5,9 @@ import Button from '../button'
 const Navigation = () => {
     return (
         <section className='flex flex-wrap space-x-2'>
-            <Link href={`/`}>
+            <Link href={`/doc`}>
                 <Button size='md' variant='ghost'>
-                    목록
+                    위키 목록
                 </Button>
             </Link>
         </section>
