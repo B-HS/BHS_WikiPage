@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-    title: 'FE개발자_변현석',
+    title: '위키페이지',
     description: '코딩허브 프론트엔드 과제',
 }
 
