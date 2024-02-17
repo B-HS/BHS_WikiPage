@@ -6,11 +6,13 @@ import Link from 'next/link'
 import { useContext } from 'react'
 
 const ListTile = ({ info }: { info?: DocProps }) => {
-    const { page } = useContext(PageContext)
+    const { page, keyword } = useContext(PageContext)
+    const pageStr = String(page)
+    const searchParam = new URLSearchParams({ page: pageStr, keyword }).toString()
     const { docid, title } = info || {}
     return (
         info && (
-            <Link href={`/doc/${docid}?page=${page || '1'}`}>
+            <Link href={`/doc/${docid}?${searchParam}`}>
                 <section className='group p-2.5 flex-1 border flex justify-start gap-3 hover:bg-secondary transition-all cursor-pointer relative rounded hover:shadow-md'>
                     <span className='w-1/12 flex justify-center'>
                         <ScrollTextIcon className='p-0.5' />
