@@ -1,8 +1,9 @@
-export interface ButtonProps {
+import { ButtonHTMLAttributes } from 'react'
+
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     variant?: keyof typeof BTN_VARIABLES
     size?: keyof typeof BTN_SIZE
     type?: 'button' | 'submit' | 'reset'
-    onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void
     disabled?: boolean
     className?: string
     children?: React.ReactNode
