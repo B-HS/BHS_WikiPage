@@ -29,18 +29,47 @@ export const findDocsWithPageable = async (page: number, cnt: number) => {
 }
 
 // 더미 doc docid기준으로 READ, 자동 링크처리를 위해 doc전체목록 + replace로 해당 타이틀을 anchor로 replacing
-// 테스트 기준 5만자 기준 1초 이하
 export const findDocByDocid = async (docid: string, page: number | string) => {
     try {
         const docs = await getFullFiles()
         const targetDoc = docs.find((ele) => ele.docid.toString() === docid)
         if (targetDoc) {
-            docs.forEach((ele) => {
-                if (ele.title !== targetDoc.title) {
+            // 전체 리스트에서  씌울 title 추출
+            // 글자가 긴 순으로 정렬(중복되는 문자열이 있을 경우 긴 순서부터 하면 중복replacing 방지 가능)
+            const replacelist = docs
+                .filter((ele) => {
                     const regex = new RegExp(`\\b${escapeRegExp(ele.title)}\\b`, 'g')
-                    targetDoc.description = targetDoc.description.replace(regex, `<a class='border-b' href="/doc/${ele.docid}?page=${page}">${ele.title} 🔗</a>`)
+                    return regex.test(targetDoc.description)
+                })
+                .map((ele) => ({ ...ele, isReplaced: false }))
+                .sort((a, b) => b?.description.length - a?.description.length)
+
+            // 다른 중복문자열 문제를 피하기위해 정렬된 Title arrayt 기준으로 본문을 인덱스로 REPLACING
+            replacelist.forEach((ele, idx) => {
+                if (!ele.isReplaced && ele.title) {
+                    const regex = new RegExp(`\\b${escapeRegExp(ele.title)}\\b`, 'g')
+                    targetDoc.description = targetDoc.description.replace(regex, `$[${idx}]$`)
+                    ele.isReplaced = true
                 }
             })
+            // $[숫자]$용 regex
+            const regexPlaceholder = /\$\[(\d+)\]\$/g
+
+            // Description에 INDEX 기준으로 최종 결과 Anchor 추가
+            const replacedDescription = targetDoc.description.replace(regexPlaceholder, (match, index) => {
+                index = parseInt(index)
+                if (index >= 0 && index < replacelist.length) {
+                    const ele = replacelist[index]
+                    // 목표title이 replacing할 description의 title과 같은 경우
+                    if (ele.title === targetDoc.title) {
+                        return ele.title
+                    }
+                    return `<a class='border-b' href="/doc/${ele.docid}?page=${page}">${ele.title} 🔗</a>`
+                }
+                return match
+            })
+
+            targetDoc.description = replacedDescription
             return targetDoc
         }
         return {}
