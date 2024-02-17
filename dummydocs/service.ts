@@ -1,6 +1,7 @@
 import { DocProps } from '@/app/doc/[docid]/page'
 import fs from 'fs/promises'
 import path from 'path'
+import { RequestParam } from './controller'
 
 // 더미 doc READ IO
 const getFullFiles = async (): Promise<DocProps[]> => {
@@ -23,13 +24,16 @@ const escapeRegExp = (string: string) => {
 }
 
 // 더미 doc 페이징 리스트 출력
-export const findDocsWithPageable = async (page: number, cnt: number) => {
-    const docs = await getFullFiles()
+export const findDocsWithPageable = async ({ page = 1, keyword }: Partial<RequestParam>, cnt: number) => {
+    let docs = await getFullFiles()
+    if (!!keyword) {
+        docs = docs.filter((ele) => ele.title.toLowerCase().includes(keyword.toLowerCase()) || ele.description.toLowerCase().includes(keyword.toLowerCase()))
+    }
     return { data: docs.splice(cnt * (page - 1), cnt), total: docs.length + cnt }
 }
 
 // 더미 doc docid기준으로 READ, 자동 링크처리를 위해 doc전체목록 + replace로 해당 타이틀을 anchor로 replacing
-export const findDocByDocid = async (docid: string, page: number | string) => {
+export const findDocByDocid = async (docid: string, page: RequestParam) => {
     try {
         const docs = await getFullFiles()
         const targetDoc = docs.find((ele) => ele.docid.toString() === docid)
@@ -65,7 +69,7 @@ export const findDocByDocid = async (docid: string, page: number | string) => {
                     if (ele.title === targetDoc.title) {
                         return ele.title
                     }
-                    return `<a class='border-b' href="/doc/${ele.docid}?page=${page}">${ele.title} 🔗</a>`
+                    return `<a class='border-b' href="/doc/${ele.docid}?${new URLSearchParams(page as unknown as Record<string, string>).toString()}">${ele.title} 🔗</a>`
                 }
                 return match
             })
