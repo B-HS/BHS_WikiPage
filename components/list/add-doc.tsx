@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { createElement, useContext, useRef, useState } from 'react'
 import Button from '../button'
 import Modal from '../modal'
+import { DEFAULT_PAGING_CNT } from '@/util/constant'
 
 interface ModalRefProps {
     open: Function
@@ -11,7 +12,7 @@ interface ModalRefProps {
 }
 
 const AddDoc = () => {
-    const { setPage } = useContext(PageContext)
+    const { setPage, setKeyword } = useContext(PageContext)
     const router = useRouter()
     const addModal = useRef<ModalRefProps>()
     const [docInfos, setDocInfos] = useState({
@@ -32,8 +33,9 @@ const AddDoc = () => {
         }
         fetch('/api/write', { method: 'POST', body: JSON.stringify(docInfos) }).then(async (response) => {
             const { total, docid } = await response.json()
-            const page = total % 5 === 1 ? Math.ceil(total / 5) - 1 : Math.ceil(total / 5)
+            const page = total % DEFAULT_PAGING_CNT === 1 ? Math.ceil(total / DEFAULT_PAGING_CNT) - 1 : Math.ceil(total / DEFAULT_PAGING_CNT)
             setPage(page)
+            setKeyword('')
             router.push(`/doc/${docid}?page=${page}`)
             resetChanges()
         })
@@ -59,7 +61,7 @@ const AddDoc = () => {
                 ref={addModal}
                 title='추가'
                 trigger={
-                    <Button size='md' variant='outline' className='rounded-none'>
+                    <Button size='sm' variant='outline' className='rounded-none'>
                         추가
                     </Button>
                 }
